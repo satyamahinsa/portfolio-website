@@ -1,6 +1,7 @@
+import Image from "next/image";
 import type { Project } from "@/content/profile";
 
-// Generated placeholder artwork until real project images are added.
+// Shows the project's thumbnail, or generated artwork when it has none.
 const patterns = [
   "[background-image:radial-gradient(rgb(255_255_255/0.25)_1px,transparent_1px)] [background-size:16px_16px]",
   "[background-image:linear-gradient(rgb(255_255_255/0.12)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255/0.12)_1px,transparent_1px)] [background-size:28px_28px]",
@@ -18,6 +19,37 @@ export function ProjectCover({
   large?: boolean;
 }) {
   const dark = index % 2 === 1;
+
+  if (project.image) {
+    return (
+      <div className="relative h-full w-full overflow-hidden bg-surface-2">
+        {/* soft, blurred copy of the image fills the empty space around it */}
+        <Image
+          src={project.image}
+          alt=""
+          aria-hidden
+          fill
+          sizes="40rem"
+          quality={40}
+          className="scale-125 object-cover opacity-70 blur-2xl saturate-150"
+        />
+        <div aria-hidden className="absolute inset-0 bg-bg/35" />
+        {/* the full image, never cropped */}
+        <div className={`absolute inset-0 ${large ? "p-6 sm:p-10" : "p-4 sm:p-6"}`}>
+          <div className="relative h-full w-full">
+            <Image
+              src={project.image}
+              alt={`${project.title} preview`}
+              fill
+              sizes={large ? "(min-width: 1152px) 72rem, 100vw" : "(min-width: 1024px) 40rem, 100vw"}
+              className="object-contain drop-shadow-[0_12px_28px_rgb(0_0_0/0.35)]"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`relative h-full w-full overflow-hidden ${

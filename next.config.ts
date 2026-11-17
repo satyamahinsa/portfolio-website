@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     // 95 is used for the hero portrait so it stays sharp on HD/retina screens.
-    qualities: [75, 95],
+    // 40 is used for the blurred background behind project thumbnails.
+    qualities: [40, 75, 95],
   },
   turbopack: {
     rules: {
